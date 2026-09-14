@@ -15,9 +15,11 @@ import org.eclipse.sw360.datahandler.thrift.RequestStatus;
 import org.eclipse.sw360.datahandler.thrift.licenses.License;
 import org.eclipse.sw360.datahandler.thrift.licenses.LicenseService;
 import org.eclipse.sw360.datahandler.thrift.users.User;
+import org.eclipse.sw360.datahandler.thrift.users.UserGroup;
 import org.eclipse.sw360.rest.resourceserver.core.BadRequestClientException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.access.AccessDeniedException;
 import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,7 +28,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,5 +66,25 @@ public class Sw360LicenseServiceTest {
         RequestStatus result = licenseService.updateLicense(new License(), new User());
 
         assertThat(result).isEqualTo(RequestStatus.SUCCESS);
+    }
+
+    @Test
+    public void getLicenseTypeUsageCount_usesIndexedUsageCount() throws TException {
+        User admin = new User().setUserGroup(UserGroup.ADMIN);
+        when(licenseClient.checkLicenseTypeInUse("license-type-id")).thenReturn(7);
+
+        int usageCount = licenseService.getLicenseTypeUsageCount("license-type-id", admin);
+
+        assertThat(usageCount).isEqualTo(7);
+        verify(licenseClient).checkLicenseTypeInUse("license-type-id");
+        verify(licenseClient, never()).getLicenseSummary();
+    }
+
+    @Test
+    public void getLicenseTypeUsageCount_rejectsNonAdmin() {
+        User user = new User().setUserGroup(UserGroup.USER);
+
+        assertThatThrownBy(() -> licenseService.getLicenseTypeUsageCount("license-type-id", user))
+                .isInstanceOf(AccessDeniedException.class);
     }
 }
