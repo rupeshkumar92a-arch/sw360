@@ -26,6 +26,7 @@ public class ThriftEnumUtilsTest {
     public void testToString() {
         Assert.assertEquals("Design document", ThriftEnumUtils.enumToString(AttachmentType.DESIGN));
         Assert.assertEquals("Git", ThriftEnumUtils.enumToString(RepositoryType.GIT));
+        Assert.assertEquals("Phase out", ThriftEnumUtils.enumToString(org.eclipse.sw360.datahandler.thrift.MainlineState.PHASEOUT));
     }
 
     @SuppressWarnings("unchecked")
