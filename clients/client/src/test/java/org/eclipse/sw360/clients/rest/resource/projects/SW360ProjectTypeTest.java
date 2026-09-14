@@ -49,6 +49,11 @@ public class SW360ProjectTypeTest {
     }
 
     @Test
+    public void testFindByValueCloudBackend() {
+        checkFindByValue(SW360ProjectType.CLOUD_BACKEND, 5);
+    }
+
+    @Test
     public void testFindByValueUnknown() {
         SW360ProjectType result = SW360ProjectType.findByValue(111);
 

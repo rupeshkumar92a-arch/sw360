@@ -230,7 +230,7 @@ public class ThriftEnumUtils {
             MainlineState.OPEN, "Open",
             MainlineState.MAINLINE, "Mainline",
             MainlineState.SPECIFIC, "Specific",
-            MainlineState.PHASEOUT, "Phaseout",
+            MainlineState.PHASEOUT, "Phase out",
             MainlineState.DENIED, "Denied"
     );
 

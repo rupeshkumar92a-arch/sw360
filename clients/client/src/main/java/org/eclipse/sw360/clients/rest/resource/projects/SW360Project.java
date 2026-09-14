@@ -24,6 +24,8 @@ public final class SW360Project extends SW360HalResource<LinkObjects, SW360Proje
     private String name;
     private String version;
     private SW360ProjectType projectType;
+    private SW360ProjectState state;
+    private SW360ProjectClearingState clearingState;
     private String description;
     private Map<String, String> externalIds;
     private String createdOn;
@@ -49,6 +51,26 @@ public final class SW360Project extends SW360HalResource<LinkObjects, SW360Proje
 
     public SW360Project setVersion(String version) {
         this.version = version;
+        return this;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public SW360ProjectState getState() {
+        return this.state;
+    }
+
+    public SW360Project setState(SW360ProjectState state) {
+        this.state = state;
+        return this;
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public SW360ProjectClearingState getClearingState() {
+        return this.clearingState;
+    }
+
+    public SW360Project setClearingState(SW360ProjectClearingState clearingState) {
+        this.clearingState = clearingState;
         return this;
     }
 
@@ -152,6 +174,8 @@ public final class SW360Project extends SW360HalResource<LinkObjects, SW360Proje
         return Objects.equals(name, that.name) &&
                 Objects.equals(version, that.version) &&
                 projectType == that.projectType &&
+                state == that.state &&
+                clearingState == that.clearingState &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(externalIds, that.externalIds) &&
                 Objects.equals(createdOn, that.createdOn) &&
@@ -163,8 +187,8 @@ public final class SW360Project extends SW360HalResource<LinkObjects, SW360Proje
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, version, projectType, description, externalIds, createdOn,
-                businessUnit, visibility, releaseIdToUsage, clearingTeam);
+        return Objects.hash(super.hashCode(), name, version, projectType, state, clearingState, description,
+                externalIds, createdOn, businessUnit, visibility, releaseIdToUsage, clearingTeam);
     }
 
     @Override
